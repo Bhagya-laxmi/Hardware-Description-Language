@@ -1,2 +1,2 @@
 # Hardware-Description-Language
-HDL
+HDL experiments using ModelSim simulator from Mentor Graphics
