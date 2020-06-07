@@ -1,0 +1,42 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity ADDER is
+  -- your generics and ports here
+  generic(
+      N : in NATURAL:=4
+    );
+    port(
+      A : in std_logic_vector(N-1 downto 0);
+      B : in std_logic_vector(N-1 downto 0);
+      Cin : in std_logic;
+      S : out std_logic_vector(N-1 downto 0);
+      Cout : out std_logic
+    );
+end;
+
+architecture RIPPLE_dataflow of ADDER is
+signal Carry: std_logic_vector(3 downto 0);
+
+begin
+  -- your code here
+Carry(0) <= Cin;
+S(0)<= A(0) xor B(0) xor Carry(0);
+Carry(1) <= ((A(0) xor B(0)) and Carry(0)) or(A(0) and B(0));
+S(1)<= A(1) xor B(1) xor Carry(1);
+Carry(2) <= ((A(1) xor B(1)) and Carry(1)) or(A(1) and B(1));
+S(2)<= A(2) xor B(2) xor Carry(2);
+Carry(3) <= ((A(2) xor B(2)) and Carry(2)) or(A(2) and B(2));
+
+Cout <= Carry(3);  
+end RIPPLE_dataflow;
+
+architecture dataflow_RIPPLE of ADDER is
+signal C: std_logic_vector(a'left downto a'right);
+
+begin
+  -- your code here
+S<= (a xor b) xor (C(a'left -1 downto 0) & cin);
+c<=((a xor b) and ( C(a'left-1 downto 0)& cin)) or(a and b);  
+Cout <= C(a'left);
+end dataflow_RIPPLE;
