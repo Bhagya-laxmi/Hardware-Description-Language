@@ -1,0 +1,45 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity ADDER is
+  generic(
+      N : in NATURAL
+    );
+    port(
+      A : in std_logic_vector(N-1 downto 0);
+      B : in std_logic_vector(N-1 downto 0);
+      Cin : in std_logic;
+      S : out std_logic_vector(N-1 downto 0);
+      Cout : out std_logic
+    );
+end entity ADDER;
+
+architecture struct_CRA of ADDER is
+
+component FAStruct is
+port(A: in std_logic;
+     B: in std_logic;
+     Cin: in std_logic; 
+     Sum: out std_logic; 
+     Cout: out std_logic );
+end component FAStruct;
+
+
+Signal C: std_logic_vector(N-1 downto 0);
+
+begin
+
+  L1:for I in N-1 downto 0 generate
+    L2: if I=N-1 generate
+      FA_n:FAStruct port map(A => A(N-1), B=> B(N-1), Cin=> C(I-1), Sum=> S(I),Cout=>Cout);
+      end generate;
+    L3: if I = 0 generate
+      FA_0 : FAStruct port map(A => A(0), B=> B(0), Cin=> Cin, Sum=> S(I),Cout=>C(1));
+        end generate;
+    L4: if I>0 and I< N-1 generate
+      FA_x: FAStruct port map(A => A(I), B=> B(I), Cin=> C(I), Sum=> S(I),Cout=>C(I+1));
+        end generate;
+  end generate;
+
+
+end architecture struct_CRA;
